@@ -6,11 +6,11 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/10/15 18:33:27 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/10/15 18:42:32 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: test all re clean fclean
+.PHONY: test re clean fclean
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
@@ -26,10 +26,8 @@ SRC = $(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 HDR = $(addprefix $(HDRDIR), ft_ping.h)
 
-test : all
+test : $(NAME)
 		./$(NAME)
-
-all : $(NAME)
 
 $(NAME) :$(OBJ)
 		$(CC) $(CFLAGS) -o $@ $< -I $(HDRDIR)
