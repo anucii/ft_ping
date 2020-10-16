@@ -6,11 +6,11 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/10/16 17:11:09 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/10/16 17:18:23 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: test re clean fclean
+.PHONY: test re clean bclean fclean
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
@@ -40,10 +40,14 @@ $(OBJDIR)%.o : $(SRCDIR)%.c $(HDR) $(LIBHDR)
 		[ -d $(OBJDIR) ] || mkdir $(OBJDIR)
 		$(CC) $(CFLAGS) -o $@ -c $< -I $(HDRDIR) -I $(LIBHDRDIR)
 
-clean : 
+bclean : 
 		rm -rf $(OBJDIR)
 
-fclean : clean
+clean : bclean
+		make -C $(LIBDIR) clean
+
+fclean : bclean
+		make -C $(LIBDIR) fclean
 		rm -rf $(NAME)
 
 re : fclean $(NAME)
