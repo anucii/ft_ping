@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jdaufin <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/08 16:22:01 by jdaufin           #+#    #+#              #
-#    Updated: 2017/10/05 14:34:50 by jdaufin          ###   ########.fr        #
+#    Updated: 2020/10/16 17:21:14 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ CCFLAGS = -Wall -Wextra -Werror -g
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	ar -urc $@ $^
+	ar -Uurc $@ $^
 	ranlib $@
 
 $(OBJDIR)%.o : $(SRCDIR)%.c $(HDR)
