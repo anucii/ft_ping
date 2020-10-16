@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/15 22:44:25 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/16 14:54:08 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ int	main(void)
 		return (-1);
 	}
 	printf("%s\n", localaddress);
+	free(localaddress);
 	return (0);
 }
