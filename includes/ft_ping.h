@@ -6,11 +6,12 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/15 18:32:48 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/16 17:04:41 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PING_H
 # define FT_PING_H
+# include "libft.h"
 
 #endif
