@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 18:37:05 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/22 19:51:49 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static _Bool	check_option(char *arg, char *argv[], int argc)
 	return (has_match);
 }
 
-static _Bool	parse_args_execute(int argc, char *argv[])
+static _Bool	parse_args_execute(int argc, char *argv[], char *target_address)
 {
 	int			i;
 	char		*arg;
@@ -53,15 +53,17 @@ static _Bool	parse_args_execute(int argc, char *argv[])
 				return (0);
 			}
 		}
+		else
+			parse_address(arg, target_address);
 	}
-	return (1);
+	return (*target_address != 0);
 }
 
-_Bool			parse_args(int argc, char *argv[])
+_Bool			parse_args(int argc, char *argv[], char *target_address)
 {
 	if ((argc < 2) || !argv)
 	{
 		return (0);
 	}
-	return (parse_args_execute(argc, argv));
+	return (parse_args_execute(argc, argv, target_address));
 }
