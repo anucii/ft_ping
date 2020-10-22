@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 19:40:25 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 19:49:35 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/22 20:08:02 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,13 @@ _Bool		is_fqdn(char *src)
 	address_parts = ft_strsplit(src, '.');
 	if (address_parts && *address_parts)
 	{
-		while (address_parts[++i]);
+		while (address_parts[++i])
+			;
 		ft_stabdel(&address_parts);
 		return (i > 1);
 	}
+	else if (address_parts)
+		free(address_parts);
 	return (0);
 }
 
@@ -38,7 +41,7 @@ void		parse_address(char *param, char *dest)
 		{
 			if (is_fqdn(param))
 				ft_strcpy(dest, param);
-			return;
+			return ;
 		}
 	}
 	show_help();

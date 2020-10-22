@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 17:26:35 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 18:37:36 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/22 20:09:55 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static _Bool		check_integer(char *s, int *dest)
 	val_ok = (val >= 0) && (val <= INT32_MAX);
 	if (val_ok)
 		*dest = (int)val;
-	return val_ok;
+	return (val_ok);
 }
 
 static void			check_count(char *argv[], int val_pos)
@@ -37,7 +37,7 @@ static void			check_count(char *argv[], int val_pos)
 		if (count > 0)
 		{
 			g_options.count = count;
-			return;
+			return ;
 		}
 	}
 	show_count_error();
@@ -51,7 +51,7 @@ static void			check_timeout(char *argv[], int val_pos)
 	if (check_integer(argv[val_pos], &timeout))
 	{
 		g_options.timeout = (unsigned int)timeout;
-		return;
+		return ;
 	}
 	show_timeout_error();
 	exit(EXIT_FAILURE);
@@ -64,7 +64,7 @@ static void			check_deadline(char *argv[], int val_pos)
 	if (check_integer(argv[val_pos], &deadline))
 	{
 		g_options.deadline = (unsigned int)deadline;
-		return;
+		return ;
 	}
 	show_deadline_error();
 	exit(EXIT_FAILURE);
@@ -77,7 +77,7 @@ void				set_options(char c, char *argv[], int pos, int argc)
 	g_options.help |= (c == 'h');
 	g_options.verbose |= (c == 'v');
 	if (g_options.ai_family != AF_INET6)
-		g_options.ai_family = (c == '6') ? AF_INET6 : AF_INET; 
+		g_options.ai_family = (c == '6') ? AF_INET6 : AF_INET;
 	next_pos = pos + 1;
 	if (next_pos < argc)
 	{
