@@ -6,14 +6,14 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/10/22 19:52:18 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/10/22 20:02:16 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: test re clean bclean fclean
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = ft_ping
 

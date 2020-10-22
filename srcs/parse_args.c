@@ -6,13 +6,13 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 19:51:49 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/22 19:59:16 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-static _Bool	check_option(char *arg, char *argv[], int argc)
+static _Bool	check_option(char *arg, char *argv[], int pos, int argc)
 {
 	char		*all_options;
 	_Bool		has_match;
@@ -29,7 +29,7 @@ static _Bool	check_option(char *arg, char *argv[], int argc)
 			has_match &= (ft_strchr(all_options, arg[i]) != NULL);
 			if (has_match)
 			{
-				set_options(arg[i], argv, i, argc);
+				set_options(arg[i], argv, pos, argc);
 			}
 		}
 		ft_strdel(&all_options);
@@ -48,7 +48,7 @@ static _Bool	parse_args_execute(int argc, char *argv[], char *target_address)
 		arg = argv[i];
 		if (arg[0] == '-')
 		{
-			if (!check_option(arg, argv, argc))
+			if (!check_option(arg, argv, i, argc))
 			{
 				return (0);
 			}
