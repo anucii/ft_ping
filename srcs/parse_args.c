@@ -6,24 +6,17 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 16:39:25 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/22 18:37:05 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-extern t_options	g_options;
-
-static void			set_options(char c)
+static _Bool	check_option(char *arg, char *argv[], int argc)
 {
-	g_options.help |= (c == 'h');
-}
-
-static _Bool		check_option(char *arg)
-{
-	char			*all_options;
-	_Bool			has_match;
-	int				i;
+	char		*all_options;
+	_Bool		has_match;
+	int			i;
 
 	has_match = 0;
 	if (ft_strlen(arg) >= 2)
@@ -36,7 +29,7 @@ static _Bool		check_option(char *arg)
 			has_match &= (ft_strchr(all_options, arg[i]) != NULL);
 			if (has_match)
 			{
-				set_options(arg[i]);
+				set_options(arg[i], argv, i, argc);
 			}
 		}
 		ft_strdel(&all_options);
@@ -44,10 +37,10 @@ static _Bool		check_option(char *arg)
 	return (has_match);
 }
 
-static _Bool		parse_args_execute(int argc, char *argv[])
+static _Bool	parse_args_execute(int argc, char *argv[])
 {
-	int				i;
-	char			*arg;
+	int			i;
+	char		*arg;
 
 	i = 0;
 	while (++i < argc)
@@ -55,7 +48,7 @@ static _Bool		parse_args_execute(int argc, char *argv[])
 		arg = argv[i];
 		if (arg[0] == '-')
 		{
-			if (!check_option(arg))
+			if (!check_option(arg, argv, argc))
 			{
 				return (0);
 			}
@@ -64,9 +57,9 @@ static _Bool		parse_args_execute(int argc, char *argv[])
 	return (1);
 }
 
-_Bool				parse_args(int argc, char *argv[])
+_Bool			parse_args(int argc, char *argv[])
 {
-	if (argc < 2)
+	if ((argc < 2) || !argv)
 	{
 		return (0);
 	}
