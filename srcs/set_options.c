@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 17:26:35 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 20:09:55 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 17:52:46 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern t_options	g_options;
 
-static _Bool		check_integer(char *s, int *dest)
+static _Bool		check_integer(char *s, int *dest, int min_val)
 {
 	intmax_t		val;
 	_Bool			val_ok;
@@ -22,51 +22,47 @@ static _Bool		check_integer(char *s, int *dest)
 	if ((!s) || (!dest))
 		return (0);
 	val = ft_atoimax(s);
-	val_ok = (val >= 0) && (val <= INT32_MAX);
+	val_ok = (val >= (intmax_t)min_val) && (val <= INT32_MAX);
 	if (val_ok)
 		*dest = (int)val;
 	return (val_ok);
 }
 
-static void			check_count(char *argv[], int val_pos)
+static void			check_positive_quantity(char key, char *argv[], int val_pos)
 {
-	int				count;
+	int				quantity;
 
-	if (check_integer(argv[val_pos], &count))
+	if (check_integer(argv[val_pos], &quantity, 1))
 	{
-		if (count > 0)
-		{
-			g_options.count = count;
-			return ;
-		}
+		if (key == 't')
+			g_options.ttl = (unsigned int)quantity;
+		else if (key == 'c')
+			g_options.count = quantity;
+		return ;
 	}
-	show_count_error();
+	if (key == 't')
+		show_ttl_error();
+	else if (key == 'c')
+		show_count_error();
 	exit(EXIT_FAILURE);
 }
 
-static void			check_timeout(char *argv[], int val_pos)
+static void			check_quantity(char key, char *argv[], int val_pos)
 {
-	int				timeout;
+	int				duration;
 
-	if (check_integer(argv[val_pos], &timeout))
+	if (check_integer(argv[val_pos], &duration, 0))
 	{
-		g_options.timeout = (unsigned int)timeout;
+		if (key == 'w')
+			g_options.deadline = (unsigned int)duration;
+		else if (key == 'W')
+			g_options.timeout = (unsigned int)duration;
 		return ;
 	}
-	show_timeout_error();
-	exit(EXIT_FAILURE);
-}
-
-static void			check_deadline(char *argv[], int val_pos)
-{
-	int				deadline;
-
-	if (check_integer(argv[val_pos], &deadline))
-	{
-		g_options.deadline = (unsigned int)deadline;
-		return ;
-	}
-	show_deadline_error();
+	if (key == 'w')
+		show_deadline_error();
+	else if (key == 'W')
+		show_timeout_error();
 	exit(EXIT_FAILURE);
 }
 
@@ -82,10 +78,12 @@ void				set_options(char c, char *argv[], int pos, int argc)
 	if (next_pos < argc)
 	{
 		if (c == 'w')
-			check_deadline(argv, next_pos);
+			check_quantity(c, argv, next_pos);
 		else if (c == 'W')
-			check_timeout(argv, next_pos);
+			check_quantity(c, argv, next_pos);
+		else if (c == 't')
+			check_positive_quantity(c, argv, next_pos);
 		else if (c == 'c')
-			check_count(argv, next_pos);
+			check_positive_quantity(c, argv, next_pos);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 12:25:47 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 17:42:15 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef	struct	s_options
 	int				count;
 	unsigned int	timeout;
 	unsigned int	deadline;
+	unsigned int	ttl;
 }				t_options;
 
 typedef struct addrinfo	t_addrinfo;
@@ -47,6 +48,7 @@ void			show_help(void);
 void			show_count_error(void);
 void			show_timeout_error(void);
 void			show_deadline_error(void);
+void			show_ttl_error(void);
 void			show_unknown_address(char *address);
 void			set_options(char c, char *argv[], int pos, int argc);
 void			parse_address(char *param, char *dest);

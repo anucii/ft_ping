@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 19:59:16 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 17:42:15 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static _Bool	check_option(char *arg, char *argv[], int pos, int argc)
 	has_match = 0;
 	if (ft_strlen(arg) >= 2)
 	{
-		all_options = ft_strdup("vhcwW46");
+		all_options = ft_strdup("vhcwWt46");
 		i = 0;
 		has_match = 1;
 		while (arg[++i])
