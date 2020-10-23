@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:28 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/16 16:18:08 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 10:06:40 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,27 @@
 static void	set_hints(t_addrinfo *hints)
 {
 	hints->ai_family = AF_INET;
-	hints->ai_socktype = 0;
+	hints->ai_socktype = SOCK_RAW;
 	hints->ai_flags = AI_V4MAPPED | AI_ADDRCONFIG;
-	hints->ai_protocol = 0;
+	hints->ai_protocol = IPPROTO_TCP;
 	hints->ai_canonname = NULL;
 	hints->ai_addr = NULL;
 	hints->ai_next = NULL;
 }
 
-static void display_addr(char *addr)
+static void display_addr(char *addr, t_addrinfo *info)
 {
-	if (addr == NULL)
+	if ((!addr) || (!info))
 	{
 		return;
 	}
-	printf("%s\n", addr);
+	printf("%s, flags:0x%x family:%d, socktype:%d, protocol:%d\n", addr, \
+		info->ai_flags, info->ai_family, info->ai_socktype, info->ai_protocol);
 }
 
 char	*get_local_address()
 {
-	char *localdomain = "localhost";
+	char *localdomain = "google.com";
 	char *localaddress;
 	t_addrinfo hints;
 	t_addrinfo *results;
@@ -83,7 +84,7 @@ char	*get_local_address()
 			}
 			
 		}
-		display_addr(localaddress);
+		display_addr(localaddress, next);
 		next = next->ai_next;
 	}
 
