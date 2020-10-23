@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 10:24:03 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 11:28:59 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 11:51:26 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,5 @@ void				resolve_address(char *input, char *ip_dest)
 	addr_ko = getaddrinfo(input, NULL, &hints, &results);
 	if (addr_ko || !results)
 		handle_failure(input);
+	freeaddrinfo(results);
 }
