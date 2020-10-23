@@ -6,13 +6,26 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 17:26:35 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 17:52:46 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 18:13:31 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
 extern t_options	g_options;
+
+static void			handle_failure(char key)
+{
+	if (key == 'w')
+		show_deadline_error();
+	else if (key == 'W')
+		show_timeout_error();
+	else if (key == 't')
+		show_ttl_error();
+	else if (key == 'c')
+		show_count_error();
+	exit(EXIT_FAILURE);
+}
 
 static _Bool		check_integer(char *s, int *dest, int min_val)
 {
@@ -35,16 +48,16 @@ static void			check_positive_quantity(char key, char *argv[], int val_pos)
 	if (check_integer(argv[val_pos], &quantity, 1))
 	{
 		if (key == 't')
+		{
+			if (quantity > 255)
+				handle_failure(key);
 			g_options.ttl = (unsigned int)quantity;
+		}
 		else if (key == 'c')
 			g_options.count = quantity;
 		return ;
 	}
-	if (key == 't')
-		show_ttl_error();
-	else if (key == 'c')
-		show_count_error();
-	exit(EXIT_FAILURE);
+	handle_failure(key);
 }
 
 static void			check_quantity(char key, char *argv[], int val_pos)
@@ -59,11 +72,7 @@ static void			check_quantity(char key, char *argv[], int val_pos)
 			g_options.timeout = (unsigned int)duration;
 		return ;
 	}
-	if (key == 'w')
-		show_deadline_error();
-	else if (key == 'W')
-		show_timeout_error();
-	exit(EXIT_FAILURE);
+	handle_failure(key);
 }
 
 void				set_options(char c, char *argv[], int pos, int argc)
