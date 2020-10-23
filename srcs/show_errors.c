@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:04:09 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/22 20:08:43 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 11:46:39 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,9 @@ void	show_timeout_error(void)
 void	show_deadline_error(void)
 {
 	printf("ft_ping: bad wait time.\n");
+}
+
+void	show_unknown_address(char *address)
+{
+	printf("ft_ping: %s: Unknown name or service\n", address);
 }
