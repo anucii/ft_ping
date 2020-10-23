@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 19:40:25 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 11:44:49 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 15:59:15 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 static _Bool	is_fqdn(char *src)
 {
 	char		**address_parts;
+	char		delimitor;
 	int			i;
 
 	if (!src)
 		return (0);
 	i = -1;
-	address_parts = ft_strsplit(src, '.');
+	delimitor = !ft_strchr(src, ':') ? '.' : ':';
+	address_parts = ft_strsplit(src, delimitor);
 	if (address_parts && *address_parts)
 	{
 		while (address_parts[++i])
 			;
 		ft_stabdel(&address_parts);
-		return (i > 1);
+		return (delimitor == '.' ? (i > 1) : (i > 0));
 	}
 	else if (address_parts)
 		free(address_parts);
