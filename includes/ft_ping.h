@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 11:20:09 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 12:25:47 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netdb.h>
+# include <arpa/inet.h>
 
 # define MAX_FQDN 255
 
@@ -34,7 +35,13 @@ typedef struct addrinfo	t_addrinfo;
 
 typedef struct sockaddr	t_sockaddr;
 
-typedef struct sockaddr_in	t_in_addr;
+typedef struct sockaddr_in	t_sockaddr_in;
+
+typedef struct sockaddr_in6	t_sockaddr_in6;
+
+typedef struct in_addr	t_in_addr;
+
+typedef struct in6_addr	t_in6_addr;
 
 void			show_help(void);
 void			show_count_error(void);

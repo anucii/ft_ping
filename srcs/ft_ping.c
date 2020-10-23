@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 11:30:34 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/23 12:09:40 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ t_options	g_options;
 int			main(int argc, char *argv[])
 {
 	char	address[MAX_FQDN];
-	char	ip_address[40];
+	char	ip_address[INET6_ADDRSTRLEN];
 
 	ft_bzero(address, MAX_FQDN);
-	ft_bzero(ip_address, 40);
+	ft_bzero(ip_address, INET6_ADDRSTRLEN);
 	if (!parse_args(argc, argv, address) || g_options.help)
 	{
 		show_help();
