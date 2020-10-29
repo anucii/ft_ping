@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/16 14:54:08 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/29 13:07:55 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	main(void)
 {
-	char *localaddress;
+	t_sockaddr *localaddress;
 
-	localaddress = get_local_address();
+	localaddress = get_target_address();
 	if (localaddress == NULL)
 	{
 		fprintf(stderr, "Erreur\n");
 		return (-1);
 	}
-	printf("%s\n", localaddress);
+	handle_ping_cycle(localaddress);
 	free(localaddress);
 	return (0);
 }

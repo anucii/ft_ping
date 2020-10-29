@@ -6,7 +6,7 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/10/15 23:10:32 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/10/23 18:35:51 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCDIR = srcs/
 OBJDIR = builds/
 HDRDIR = includes/
 
-FILES = ft_ping get_local_address
+FILES = ft_ping get_target_address handle_ping_cycle
 SRC = $(addprefix $(SRCDIR), $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix $(OBJDIR), $(addsuffix .o, $(FILES)))
 HDR = $(addprefix $(HDRDIR), ft_ping.h)

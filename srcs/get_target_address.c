@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_local_address.c                                :+:      :+:    :+:   */
+/*   get_target_address.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:28 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 10:06:40 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/29 13:08:41 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 static void	set_hints(t_addrinfo *hints)
 {
@@ -36,18 +33,19 @@ static void display_addr(char *addr, t_addrinfo *info)
 		info->ai_flags, info->ai_family, info->ai_socktype, info->ai_protocol);
 }
 
-char	*get_local_address()
+t_sockaddr	*get_target_address()
 {
 	char *localdomain = "google.com";
-	char *localaddress;
+	char localaddress[NI_MAXHOST];
+	t_sockaddr *ret;
 	t_addrinfo hints;
 	t_addrinfo *results;
 	t_addrinfo *next;
 	int s;
 
 	printf("NI_MAXHOST = %d\n", NI_MAXHOST);
-	localaddress = malloc(NI_MAXHOST);
-	if (localaddress == NULL)
+	ret = (t_sockaddr *)malloc(sizeof(t_sockaddr));
+	if (ret == NULL)
 	{
 		return (NULL);
 	}
@@ -68,7 +66,7 @@ char	*get_local_address()
 		t_in_addr	*sockaddr_in;
 		sockaddr = next->ai_addr;
 		sockaddr_in = &((t_sockaddr_in *)sockaddr)->sin_addr;
-		if (!inet_ntop(AF_INET, sockaddr_in, localaddress, sizeof(t_sockaddr_in)))
+		if (!inet_ntop(AF_INET, sockaddr_in, (char *)localaddress, sizeof(t_sockaddr_in)))
 		{
 			if (errno == EAFNOSUPPORT)
 			{
@@ -85,8 +83,9 @@ char	*get_local_address()
 			
 		}
 		display_addr(localaddress, next);
+		memcpy(ret, sockaddr, sizeof(t_sockaddr));
 		next = next->ai_next;
 	}
 
-	return (localaddress);
+	return (ret);
 }
