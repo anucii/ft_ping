@@ -6,16 +6,17 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 18:31:43 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 12:12:28 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/30 16:43:46 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
+extern int ttl;
+int socket_fd;
+
 static int	create_icmp_socket()
 {
-	int			socket_fd;
-
 	socket_fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (socket_fd < 0)
 	{
@@ -42,6 +43,7 @@ static int	create_icmp_socket()
 			fprintf(stderr, ", errno: %d\n", errno);
 		exit(EXIT_FAILURE);
 	}
+	setsockopt(socket_fd, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl));
 	return (socket_fd);
 }
 
@@ -105,6 +107,7 @@ void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 	char		msg_name[255];
 	char 		msg_ctrl[255];
 	t_iovec		iovec[1024];
+	int			recv_err;
 
 	if (!target)
 	{
@@ -123,21 +126,22 @@ void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 	if (send_res == -1)
 		display_msg_error();
 	else
-		printf("%zd bytes sent\n.", send_res);
+		printf("%zd bytes sent\n", send_res);
 	memset(msg_name, 0, 255);
 	memset(msg_ctrl, 0, 255);
 	msghdr.msg_name = msg_name;
 	msghdr.msg_control = msg_ctrl;
 	msghdr.msg_iov = iovec;
 
-	alarm(5);
+	alarm(5); // -W option value
 	recv_res = recvmsg(socket_fd, &msghdr, 0);
-	if (recv_res == -1)
-		display_recv_error();
-	else
-	{
+	recv_err = errno;
+	if (recv_res > -1)
 		printf("%zd bytes received from %s - ctrl = %s\n", recv_res, msg_name, msg_ctrl);
-		
-	}
+	else if (recv_err == EBADF)
+		return ;
+	else
+		display_recv_error();
+	
 	close(socket_fd);
 }

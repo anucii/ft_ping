@@ -6,7 +6,7 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/10/23 18:35:51 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/10/30 16:44:34 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ clean :
 fclean : clean
 		rm -rf $(NAME)
 
-re : fclean $(NAME)
+re : fclean $(NAME)
 
 test : $(NAME)
 		./$(NAME)

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:28 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/29 13:08:41 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/30 16:22:26 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ static void display_addr(char *addr, t_addrinfo *info)
 		info->ai_flags, info->ai_family, info->ai_socktype, info->ai_protocol);
 }
 
-t_sockaddr	*get_target_address()
+t_sockaddr	*get_target_address(char *str_addr)
 {
-	char *localdomain = "google.com";
 	char localaddress[NI_MAXHOST];
 	t_sockaddr *ret;
 	t_addrinfo hints;
@@ -52,7 +51,7 @@ t_sockaddr	*get_target_address()
 
 	memset(&hints, 0, sizeof(t_addrinfo));
 	set_hints(&hints);
-	s = getaddrinfo(localdomain, NULL, &hints, &results);
+	s = getaddrinfo(str_addr, NULL, &hints, &results);
 	if ((s != 0) || (results == NULL))
 	{
 		fprintf(stderr, "%s\n", gai_strerror(s));
