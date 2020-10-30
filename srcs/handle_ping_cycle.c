@@ -6,14 +6,14 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 18:31:43 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 16:43:46 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/30 23:45:40 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
 extern int ttl;
-int socket_fd;
+extern int socket_fd;
 
 static int	create_icmp_socket()
 {
@@ -54,13 +54,13 @@ static unsigned short checksum(t_ip_icmp *hdr)
 	int				i, size;
 
 	size = sizeof(t_ip_icmp) / 2;
-	i = 0;
+	i = -1;
 	array = (unsigned short *)hdr;
-	sum = *array;
+	sum = 0;
 
 	while (++i < size)
 	{
-		sum ^= array[i];
+		sum += array[i];
 	}
 
 	return sum ^ 0xFFFF;
@@ -71,7 +71,7 @@ static void	fill_icmp_header(t_ip_icmp *hdr, int seq_num)
 	hdr->icmp_type = 8;
 	hdr->icmp_code = 0;
 	hdr->icmp_cksum = 0;
-	hdr->icmp_hun.ih_idseq.icd_id = 0;
+	hdr->icmp_hun.ih_idseq.icd_id = (unsigned short)getpid();
 	hdr->icmp_hun.ih_idseq.icd_seq = seq_num;
 
 	hdr->icmp_cksum = checksum(hdr);
@@ -92,22 +92,60 @@ static void display_msg_error()
 	
 }
 
-static void display_recv_error()
+static void display_recv_error(int err_num)
 {
-	fprintf(stderr, "Message receive error : %d\n", errno);
+	fprintf(stderr, "Message receive error : %d\n", err_num);
+}
+
+static void send_echo(t_sockaddr *target, t_ip_icmp *ip_icmp, int seq_num)
+{
+	ssize_t		send_res;
+
+	memset(ip_icmp, 0, sizeof(t_ip_icmp));
+	fill_icmp_header(ip_icmp, seq_num);
+	send_res = sendto(socket_fd, ip_icmp, (size_t)sizeof(t_ip_icmp), 0, target, sizeof(t_sockaddr));
+	if (send_res == -1)
+		display_msg_error();
+	else
+		printf("%zd bytes sent\n", send_res);
+}
+
+static void parse_reply(t_msghdr *pmsghdr, int seq_num)
+{
+	printf("Reply: %s - seq_num %d\n", pmsghdr ? "exists" : "null", seq_num);
+}
+
+static void handle_reply(int seq_num)
+{
+	t_msghdr	msghdr;
+	ssize_t		recv_res;
+	char		msg_name[255];
+	char 		msg_ctrl[255];
+	t_iovec		iovec[2];
+	int			recv_err;
+
+
+	memset(msg_name, 0, 255);
+	memset(msg_ctrl, 0, 255);
+	msghdr.msg_name = msg_name;
+	msghdr.msg_control = msg_ctrl;
+	msghdr.msg_iov = iovec;
+	msghdr.msg_iovlen = 1;
+
+	alarm(5); // -W option value
+	recv_res = recvmsg(socket_fd, &msghdr, 0);
+	recv_err = errno;
+	if (recv_res > -1)
+		parse_reply(&msghdr, seq_num);
+	else if (recv_err == EBADF)
+		return ;
+	else
+		display_recv_error(recv_err);
 }
 
 void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 {
 	t_ip_icmp	ip_icmp;
-	t_msghdr	msghdr;
-	int 		socket_fd;
-	ssize_t		send_res;
-	ssize_t		recv_res;
-	char		msg_name[255];
-	char 		msg_ctrl[255];
-	t_iovec		iovec[1024];
-	int			recv_err;
 
 	if (!target)
 	{
@@ -120,28 +158,9 @@ void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 		fprintf(stderr, "Socket creation failed.\n");
 		return;
 	}
-	memset(&ip_icmp, 0, sizeof(t_ip_icmp));
-	fill_icmp_header(&ip_icmp, seq_num);
-	send_res = sendto(socket_fd, &ip_icmp, (size_t)sizeof(ip_icmp), 0, target, sizeof(t_sockaddr));
-	if (send_res == -1)
-		display_msg_error();
-	else
-		printf("%zd bytes sent\n", send_res);
-	memset(msg_name, 0, 255);
-	memset(msg_ctrl, 0, 255);
-	msghdr.msg_name = msg_name;
-	msghdr.msg_control = msg_ctrl;
-	msghdr.msg_iov = iovec;
-
-	alarm(5); // -W option value
-	recv_res = recvmsg(socket_fd, &msghdr, 0);
-	recv_err = errno;
-	if (recv_res > -1)
-		printf("%zd bytes received from %s - ctrl = %s\n", recv_res, msg_name, msg_ctrl);
-	else if (recv_err == EBADF)
-		return ;
-	else
-		display_recv_error();
+	send_echo(target, &ip_icmp, seq_num);
+	handle_reply(seq_num);
 	
-	close(socket_fd);
+	if (socket_fd != -2)
+		close(socket_fd);
 }

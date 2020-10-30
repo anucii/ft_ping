@@ -6,20 +6,21 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 16:27:00 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/10/30 23:12:31 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
 int ttl;
-extern int socket_fd;
+int socket_fd;
 
 void on_timeout(int signum)
 {
 	if (signum == SIGALRM)
 	{
 		close(socket_fd);
+		socket_fd = -2;
 	}
 }
 
@@ -51,7 +52,7 @@ int	main(int ac, char *av[])
 	for (i = 0; i < 5; i++)
 	{
 		signal(SIGALRM, &on_timeout);
-		handle_ping_cycle(localaddress, i);
+		handle_ping_cycle(localaddress, i + 1);
 	}
 	free(localaddress);
 	return (0);
