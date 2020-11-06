@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 23:12:31 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/06 17:55:58 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int ttl;
 int socket_fd;
+char *g_fqdn;
 
 void on_timeout(int signum)
 {
@@ -55,5 +56,6 @@ int	main(int ac, char *av[])
 		handle_ping_cycle(localaddress, i + 1);
 	}
 	free(localaddress);
+	free(g_fqdn);
 	return (0);
 }

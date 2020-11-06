@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 16:22:26 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/05 16:35:45 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <netinet/ip_icmp.h>
+# include <netinet/ip.h>
 # include <signal.h>
 
 # define INET_ADDRLEN 128
@@ -35,6 +36,8 @@ typedef struct in_addr		t_in_addr;
 typedef struct icmp			t_ip_icmp;
 typedef struct msghdr		t_msghdr;
 typedef struct iovec		t_iovec;
+typedef struct icmphdr		t_icmph;
+typedef struct iphdr		t_iph;
 
 t_sockaddr	*get_target_address(char *str_addr);
 void		handle_ping_cycle(t_sockaddr *target, int seq_num);

@@ -6,18 +6,20 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:45:28 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 16:22:26 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/06 19:24:20 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
+
+extern char *g_fqdn;
 
 static void	set_hints(t_addrinfo *hints)
 {
 	hints->ai_family = AF_INET;
 	hints->ai_socktype = SOCK_RAW;
 	hints->ai_flags = AI_V4MAPPED | AI_ADDRCONFIG;
-	hints->ai_protocol = IPPROTO_TCP;
+	hints->ai_protocol = IPPROTO_ICMP;
 	hints->ai_canonname = NULL;
 	hints->ai_addr = NULL;
 	hints->ai_next = NULL;
@@ -36,6 +38,7 @@ static void display_addr(char *addr, t_addrinfo *info)
 t_sockaddr	*get_target_address(char *str_addr)
 {
 	char localaddress[NI_MAXHOST];
+	char fqdn[NI_MAXHOST];
 	t_sockaddr *ret;
 	t_addrinfo hints;
 	t_addrinfo *results;
@@ -50,11 +53,18 @@ t_sockaddr	*get_target_address(char *str_addr)
 	}
 
 	memset(&hints, 0, sizeof(t_addrinfo));
+	memset(fqdn, 0, NI_MAXHOST);
 	set_hints(&hints);
 	s = getaddrinfo(str_addr, NULL, &hints, &results);
 	if ((s != 0) || (results == NULL))
 	{
 		fprintf(stderr, "%s\n", gai_strerror(s));
+		return (NULL);
+	}
+	g_fqdn = (char *)malloc(NI_MAXHOST);
+	if (g_fqdn == NULL)
+	{
+		fprintf(stderr, "Memory allocation for FQDN failed\n");
 		return (NULL);
 	}
 	memset(localaddress, 0, NI_MAXHOST);

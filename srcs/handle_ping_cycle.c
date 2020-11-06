@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 18:31:43 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/30 23:45:40 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/06 20:07:40 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 extern int ttl;
 extern int socket_fd;
+extern char *g_fqdn;
 
 static int	create_icmp_socket()
 {
@@ -110,9 +111,44 @@ static void send_echo(t_sockaddr *target, t_ip_icmp *ip_icmp, int seq_num)
 		printf("%zd bytes sent\n", send_res);
 }
 
+static unsigned int ihl_words_to_bytes(unsigned int ip_header_32bits_words)
+{
+	return 4 * ip_header_32bits_words;
+}
+
 static void parse_reply(t_msghdr *pmsghdr, int seq_num)
 {
-	printf("Reply: %s - seq_num %d\n", pmsghdr ? "exists" : "null", seq_num);
+	t_sockaddr_in 	*peer_addr;
+	t_in_addr		*in_addr;
+	t_icmph			*picmph;
+	t_iph			*piph;
+	unsigned short 	id;
+	char			addr_str[NI_MAXHOST];
+
+	// TODO !!
+	peer_addr = (t_sockaddr_in *)pmsghdr->msg_name;
+	in_addr = &(peer_addr->sin_addr);
+	if (!inet_ntop(AF_INET, in_addr, addr_str, NI_MAXHOST))
+	{
+		memcpy(addr_str, "UNKNOWN", sizeof("UNKNOWN"));
+	}
+	piph = (t_iph *)(pmsghdr->msg_iov->iov_base);
+	picmph = (t_icmph *)(pmsghdr->msg_iov->iov_base + ihl_words_to_bytes(piph->ihl));
+	id = picmph->un.echo.id;
+	if (id == (unsigned short)getpid() && picmph->type == ICMP_ECHOREPLY)
+			printf("Reply from %s (%s) - seq_num %d, ttl=%d\n", g_fqdn, addr_str, seq_num, piph->ttl);
+	else if (picmph->type == ICMP_TIME_EXCEEDED)
+			printf("From %s (%s) icmp_seq=%d Time to live exceeded\n", g_fqdn, addr_str, seq_num);
+
+	//DBG
+	/* unsigned char *cast = (unsigned char *)pmsghdr->msg_iov->iov_base;
+	for (int i = 0; i < 64; i++)
+	{
+		if ((i % 16) == 0)
+			printf("\n");
+		printf("%.2x ", cast[i]);
+	}
+	printf("\n"); */
 }
 
 static void handle_reply(int seq_num)
@@ -121,15 +157,21 @@ static void handle_reply(int seq_num)
 	ssize_t		recv_res;
 	char		msg_name[255];
 	char 		msg_ctrl[255];
-	t_iovec		iovec[2];
+	char		icmph[65];
+	t_iovec		iov;
+	//t_icmph		icmph;
 	int			recv_err;
 
 
+	iov.iov_base = &icmph;
+	iov.iov_len = 65;
 	memset(msg_name, 0, 255);
 	memset(msg_ctrl, 0, 255);
+	memset(icmph, 0, 65);
 	msghdr.msg_name = msg_name;
 	msghdr.msg_control = msg_ctrl;
-	msghdr.msg_iov = iovec;
+	msghdr.msg_controllen = 255;
+	msghdr.msg_iov = &iov;
 	msghdr.msg_iovlen = 1;
 
 	alarm(5); // -W option value
