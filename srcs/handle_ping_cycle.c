@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 18:31:43 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/08 23:06:00 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/08 23:29:24 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,16 @@ static unsigned int ihl_words_to_bytes(unsigned int ip_header_32bits_words)
 	return 4 * ip_header_32bits_words;
 }
 
+static unsigned int little_endian(unsigned short val)
+{
+	unsigned short	little_end;
+	unsigned short	big_end;
+
+	little_end = val >> 8;
+	big_end = 0xffff & (val << 8);
+	return big_end + little_end;
+}
+
 static void parse_reply(t_msghdr *pmsghdr, int seq_num, double rtt)
 {
 	t_sockaddr_in 	*peer_addr;
@@ -125,6 +135,8 @@ static void parse_reply(t_msghdr *pmsghdr, int seq_num, double rtt)
 	t_icmph			*picmph;
 	t_iph			*piph;
 	unsigned short 	id;
+	unsigned int	recv_len;
+	unsigned int	hdr_len;
 	char			addr_str[NI_MAXHOST];
 
 	// TODO !!
@@ -135,10 +147,12 @@ static void parse_reply(t_msghdr *pmsghdr, int seq_num, double rtt)
 		memcpy(addr_str, "UNKNOWN", sizeof("UNKNOWN"));
 	}
 	piph = (t_iph *)(pmsghdr->msg_iov->iov_base);
-	picmph = (t_icmph *)(pmsghdr->msg_iov->iov_base + ihl_words_to_bytes(piph->ihl));
+	hdr_len = ihl_words_to_bytes(piph->ihl);
+	picmph = (t_icmph *)(pmsghdr->msg_iov->iov_base + hdr_len);
 	id = picmph->un.echo.id;
+	recv_len = little_endian(piph->tot_len) - hdr_len;
 	if (id == (unsigned short)getpid() && picmph->type == ICMP_ECHOREPLY)
-			printf("Reply from %s (%s) - seq_num %d, ttl=%d, time=%.1fms\n", g_fqdn, addr_str,\
+			printf("%d bytes from %s (%s) - seq_num %d, ttl=%d, time=%.1fms\n", recv_len, g_fqdn, addr_str,\
 			 seq_num, piph->ttl, rtt);
 	else if (picmph->type == ICMP_TIME_EXCEEDED)
 			printf("From %s (%s) icmp_seq=%d Time to live exceeded\n", g_fqdn, addr_str, seq_num);
