@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 18:31:43 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/06 20:07:40 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/08 23:06:00 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,14 @@ static void display_recv_error(int err_num)
 	fprintf(stderr, "Message receive error : %d\n", err_num);
 }
 
-static void send_echo(t_sockaddr *target, t_ip_icmp *ip_icmp, int seq_num)
+static void send_echo(t_sockaddr *target, t_ip_icmp *ip_icmp, int seq_num, t_timeval *psending_time)
 {
 	ssize_t		send_res;
 
 	memset(ip_icmp, 0, sizeof(t_ip_icmp));
 	fill_icmp_header(ip_icmp, seq_num);
+	if (gettimeofday(psending_time, NULL) != 0)
+		fprintf(stderr, "Timestamp error, n°%d\n", errno);
 	send_res = sendto(socket_fd, ip_icmp, (size_t)sizeof(t_ip_icmp), 0, target, sizeof(t_sockaddr));
 	if (send_res == -1)
 		display_msg_error();
@@ -116,7 +118,7 @@ static unsigned int ihl_words_to_bytes(unsigned int ip_header_32bits_words)
 	return 4 * ip_header_32bits_words;
 }
 
-static void parse_reply(t_msghdr *pmsghdr, int seq_num)
+static void parse_reply(t_msghdr *pmsghdr, int seq_num, double rtt)
 {
 	t_sockaddr_in 	*peer_addr;
 	t_in_addr		*in_addr;
@@ -136,7 +138,8 @@ static void parse_reply(t_msghdr *pmsghdr, int seq_num)
 	picmph = (t_icmph *)(pmsghdr->msg_iov->iov_base + ihl_words_to_bytes(piph->ihl));
 	id = picmph->un.echo.id;
 	if (id == (unsigned short)getpid() && picmph->type == ICMP_ECHOREPLY)
-			printf("Reply from %s (%s) - seq_num %d, ttl=%d\n", g_fqdn, addr_str, seq_num, piph->ttl);
+			printf("Reply from %s (%s) - seq_num %d, ttl=%d, time=%.1fms\n", g_fqdn, addr_str,\
+			 seq_num, piph->ttl, rtt);
 	else if (picmph->type == ICMP_TIME_EXCEEDED)
 			printf("From %s (%s) icmp_seq=%d Time to live exceeded\n", g_fqdn, addr_str, seq_num);
 
@@ -151,7 +154,22 @@ static void parse_reply(t_msghdr *pmsghdr, int seq_num)
 	printf("\n"); */
 }
 
-static void handle_reply(int seq_num)
+static double compute_rtt(const t_timeval sending_time)
+{
+	t_timeval	recv_time;
+	double		round_trip_time;
+	time_t		seconds_delta;
+	suseconds_t	microseconds_delta;
+
+	if (gettimeofday(&recv_time, NULL))
+		return (0);
+	seconds_delta = recv_time.tv_sec - sending_time.tv_sec;
+	microseconds_delta = recv_time.tv_usec - sending_time.tv_usec;
+	round_trip_time = (double)seconds_delta + ((double)microseconds_delta / 1000);
+	return round_trip_time;
+}
+
+static void handle_reply(int seq_num, const t_timeval sending_time)
 {
 	t_msghdr	msghdr;
 	ssize_t		recv_res;
@@ -161,6 +179,7 @@ static void handle_reply(int seq_num)
 	t_iovec		iov;
 	//t_icmph		icmph;
 	int			recv_err;
+	double		round_trip_time;
 
 
 	iov.iov_base = &icmph;
@@ -177,8 +196,9 @@ static void handle_reply(int seq_num)
 	alarm(5); // -W option value
 	recv_res = recvmsg(socket_fd, &msghdr, 0);
 	recv_err = errno;
+	round_trip_time = compute_rtt(sending_time);
 	if (recv_res > -1)
-		parse_reply(&msghdr, seq_num);
+		parse_reply(&msghdr, seq_num, round_trip_time);
 	else if (recv_err == EBADF)
 		return ;
 	else
@@ -188,6 +208,7 @@ static void handle_reply(int seq_num)
 void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 {
 	t_ip_icmp	ip_icmp;
+	t_timeval	sending_time;
 
 	if (!target)
 	{
@@ -200,8 +221,8 @@ void	handle_ping_cycle(t_sockaddr *target, int seq_num)
 		fprintf(stderr, "Socket creation failed.\n");
 		return;
 	}
-	send_echo(target, &ip_icmp, seq_num);
-	handle_reply(seq_num);
+	send_echo(target, &ip_icmp, seq_num, &sending_time);
+	handle_reply(seq_num, sending_time);
 	
 	if (socket_fd != -2)
 		close(socket_fd);
