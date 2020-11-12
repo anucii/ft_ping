@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/12 10:03:11 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/12 11:50:32 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <arpa/inet.h>
 
 # define MAX_FQDN 255
+# define DYNARR_BUF 512 // TODO : reduce value to test reallocations
 
 typedef	struct	s_options
 {
@@ -37,6 +38,13 @@ typedef struct	s_pkglen
 	unsigned short	tot_len;
 	unsigned short	data_len;
 }				t_pkglen;
+
+typedef struct	s_dynarray
+{
+	double	*array;
+	size_t	capacity;
+	size_t	last_val_index;
+}				t_dynarray;
 
 typedef struct addrinfo	t_addrinfo;
 
@@ -60,5 +68,10 @@ void			set_options(char c, char *argv[], int pos, int argc);
 void			parse_address(char *param, char *dest);
 void			resolve_address(char *input, char *ip_dest, char *fqdn);
 _Bool			parse_args(int argc, char *argv[], char *target_address);
+
+_Bool			dynarray_init(t_dynarray *parray);
+_Bool			dynarray_add(t_dynarray *parray, double val);
+void			dynarray_free(t_dynarray *parray);
+size_t			dynarray_getbuflen(void);
 
 #endif
