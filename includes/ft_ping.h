@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 17:42:15 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/12 10:03:11 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ typedef	struct	s_options
 	unsigned int	ttl;
 }				t_options;
 
+typedef struct	s_pkglen
+{
+	unsigned short	tot_len;
+	unsigned short	data_len;
+}				t_pkglen;
+
 typedef struct addrinfo	t_addrinfo;
 
 typedef struct sockaddr	t_sockaddr;
@@ -52,7 +58,7 @@ void			show_ttl_error(void);
 void			show_unknown_address(char *address);
 void			set_options(char c, char *argv[], int pos, int argc);
 void			parse_address(char *param, char *dest);
-void			resolve_address(char *input, char *ip_dest);
+void			resolve_address(char *input, char *ip_dest, char *fqdn);
 _Bool			parse_args(int argc, char *argv[], char *target_address);
 
 #endif
