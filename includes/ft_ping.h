@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 15:58:33 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 16:32:29 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ typedef struct sockaddr_in6	t_sockaddr_in6;
 typedef struct in_addr	t_in_addr;
 
 typedef struct in6_addr	t_in6_addr;
+
+typedef struct	s_ping_shared_data
+{
+	t_sockaddr		target_addr;
+}				t_ping_shared_data;
 
 void			show_help(void);
 void			show_count_error(void);

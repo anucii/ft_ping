@@ -6,19 +6,21 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 10:24:03 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 09:49:21 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 16:31:44 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-static void			handle_failure(char *flawed_input)
+extern t_ping_shared_data	g_ping_data;
+
+static void		handle_failure(char *flawed_input)
 {
 	show_unknown_address(flawed_input);
 	exit(EXIT_FAILURE);
 }
 
-static void			set_hints(t_addrinfo *hints)
+static void		set_hints(t_addrinfo *hints)
 {
 	hints->ai_family = AF_INET;
 	hints->ai_socktype = SOCK_RAW;
@@ -29,11 +31,11 @@ static void			set_hints(t_addrinfo *hints)
 	hints->ai_next = NULL;
 }
 
-static _Bool		ip_to_str(char *ip_dest, t_addrinfo *results, char *fqdn)
+static _Bool	ip_to_str(char *ip_dest, t_addrinfo *results, char *fqdn)
 {
-	t_sockaddr		*sockaddr;
-	t_sockaddr_in	*sockaddr_in;
-	t_in_addr		*in_addr;
+	t_sockaddr			*sockaddr;
+	t_sockaddr_in		*sockaddr_in;
+	t_in_addr			*in_addr;
 
 	sockaddr = results->ai_addr;
 	ft_bzero(fqdn, MAX_FQDN);
@@ -48,14 +50,15 @@ static _Bool		ip_to_str(char *ip_dest, t_addrinfo *results, char *fqdn)
 	if (!inet_ntop(sockaddr->sa_family, in_addr, ip_dest, \
 		sizeof(t_sockaddr_in)))
 		return (0);
+	ft_memcpy(&g_ping_data.target_addr, sockaddr, sizeof(t_sockaddr));
 	return (1);
 }
 
-void				resolve_address(char *input, char *ip_dest, char *fqdn)
+void			resolve_address(char *input, char *ip_dest, char *fqdn)
 {
-	t_addrinfo		hints;
-	t_addrinfo		*results;
-	int				addr_ko;
+	t_addrinfo			hints;
+	t_addrinfo			*results;
+	int					addr_ko;
 
 	if (!input || !ip_dest)
 		handle_failure(input);
