@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 15:37:30 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 15:58:33 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ typedef	struct	s_options
 	unsigned int	deadline;
 	unsigned int	ttl;
 }				t_options;
+
+typedef struct	s_argv_cursor
+{
+	int				index;
+	int				argc;
+}				t_argv_cursor;
+
 
 typedef struct	s_pkglen
 {
@@ -63,7 +70,7 @@ void			show_timeout_error(void);
 void			show_deadline_error(void);
 void			show_ttl_error(void);
 void			show_unknown_address(char *address);
-void			set_options(char c, char *argv[], int pos, int argc, \
+void			set_options(char c, char *argv[], const t_argv_cursor cursor, \
 	t_options *options);
 void			parse_address(char *param, char *dest);
 void			resolve_address(char *input, char *ip_dest, char *fqdn);

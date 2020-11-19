@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 17:26:35 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 15:39:04 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 16:06:05 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static _Bool		check_integer(char *s, int *dest, int min_val)
 	return (val_ok);
 }
 
-static void			check_positive_quantity(char key, char *argv[], int val_pos, \
-	t_options *options)
+static void			check_positive_quantity(char key, char *argv[], \
+	int val_pos, t_options *options)
 {
 	int				quantity;
 
@@ -59,7 +59,8 @@ static void			check_positive_quantity(char key, char *argv[], int val_pos, \
 	handle_failure(key);
 }
 
-static void			check_quantity(char key, char *argv[], int val_pos, t_options *options)
+static void			check_quantity(char key, char *argv[], int val_pos, \
+	t_options *options)
 {
 	int				duration;
 
@@ -74,14 +75,15 @@ static void			check_quantity(char key, char *argv[], int val_pos, t_options *opt
 	handle_failure(key);
 }
 
-void				set_options(char c, char *argv[], int pos, int argc, t_options *options)
+void				set_options(char c, char *argv[], \
+	const t_argv_cursor cursor, t_options *options)
 {
 	int				next_pos;
 
 	options->help |= (c == 'h');
 	options->verbose |= (c == 'v');
-	next_pos = pos + 1;
-	if (next_pos < argc)
+	next_pos = cursor.index + 1;
+	if (next_pos < cursor.argc)
 	{
 		if (c == 'w')
 			check_quantity(c, argv, next_pos, options);
