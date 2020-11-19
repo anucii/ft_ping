@@ -6,13 +6,14 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 09:45:56 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 15:39:04 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-static _Bool	check_option(char *arg, char *argv[], int pos, int argc)
+static _Bool	check_option(char *arg, char *argv[], int pos, int argc, \
+	t_options *options)
 {
 	char		*all_options;
 	_Bool		has_match;
@@ -29,7 +30,7 @@ static _Bool	check_option(char *arg, char *argv[], int pos, int argc)
 			has_match &= (ft_strchr(all_options, arg[i]) != NULL);
 			if (has_match)
 			{
-				set_options(arg[i], argv, pos, argc);
+				set_options(arg[i], argv, pos, argc, options);
 			}
 		}
 		ft_strdel(&all_options);
@@ -37,7 +38,8 @@ static _Bool	check_option(char *arg, char *argv[], int pos, int argc)
 	return (has_match);
 }
 
-static _Bool	parse_args_execute(int argc, char *argv[], char *target_address)
+static _Bool	parse_args_execute(int argc, char *argv[], char *target_address, \
+	t_options *options)
 {
 	int			i;
 	char		*arg;
@@ -48,7 +50,7 @@ static _Bool	parse_args_execute(int argc, char *argv[], char *target_address)
 		arg = argv[i];
 		if (arg[0] == '-')
 		{
-			if (!check_option(arg, argv, i, argc))
+			if (!check_option(arg, argv, i, argc, options))
 			{
 				return (0);
 			}
@@ -59,11 +61,12 @@ static _Bool	parse_args_execute(int argc, char *argv[], char *target_address)
 	return (*target_address != 0);
 }
 
-_Bool			parse_args(int argc, char *argv[], char *target_address)
+_Bool			parse_args(int argc, char *argv[], char *target_address, \
+	t_options *options)
 {
 	if ((argc < 2) || !argv)
 	{
 		return (0);
 	}
-	return (parse_args_execute(argc, argv, target_address));
+	return (parse_args_execute(argc, argv, target_address, options));
 }
