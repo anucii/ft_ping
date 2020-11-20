@@ -6,13 +6,22 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 16:43:23 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 23:48:13 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
 extern t_ping_shared_data	g_ping_data;
+
+static void	close_socket(int sig_num)
+{
+	if (sig_num == SIGALRM)
+	{
+		close(g_ping_data.socket_fd);
+		g_ping_data.socket_fd = -2;
+	}
+}
 
 static int	create_icmp_socket(unsigned int *ttl)
 {
@@ -55,6 +64,8 @@ static void	handle_round_trip(t_options *options, \
 	t_timeval				sending_time;
 	
 	g_ping_data.socket_fd = create_icmp_socket(&options->ttl);
+	if (options->timeout > 0)
+		alarm(options->timeout);
 	if (g_ping_data.socket_fd == -1)
 	{
 		fprintf(stderr, "ft_ping: socket: creation failed.\n");
@@ -79,12 +90,12 @@ void		handle_cycle(char *ip_str, t_options *options)
 	}
 	printf("PING %s (%s)\n", g_ping_data.fqdn, ip_str);
 	gettimeofday(&g_ping_data.ping_first_timestamp, NULL);
+	if (options->deadline > 0)
+		alarm(options->deadline);
 	while (1)
 	{
-		if (options->timeout > 0)
-			alarm(options->timeout);
+		signal(SIGALRM, &close_socket);
 		handle_round_trip(options, ++seq_num);
-		alarm(0);
 		if (++round_trips >= options-> count)
 			break;
 	}

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 17:02:13 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 23:47:47 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void			handle_reply(t_options *options, const t_timeval sending_time)
 	round_trip_time = compute_rtt(sending_time);
 	if (recv_res > -1)
 		parse_reply(&msghdr, round_trip_time, options->verbose);
+	else if (g_ping_data.socket_fd == -2)
+		return ;
 	else
 		fprintf(stderr, "ft_ping: recvmsg: operation failed");	
 }
