@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 16:00:10 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 17:02:13 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@ static void		display_result(t_icmph *picmph, \
 			pmetadata->recv_len, g_ping_data.fqdn, addr_str, \
 			pmetadata->seq_num, pmetadata->ttl, pmetadata->round_trip_time);
 	}
-	else if (matching_id && verbose)
+	else if (verbose)
 		printf("%d bytes from %s (%s): type=%d code=%d\n", \
-			pmetadata->recv_len, g_ping_data.fqdn, addr_str, \
-			picmph->type, picmph->code);
-	else if (matching_id)
-		printf("From %s (%s) icmp_seq=%d Unexpected response type\n", \
-			g_ping_data.fqdn, addr_str, pmetadata->seq_num);
+			pmetadata->recv_len, matching_id ? g_ping_data.fqdn : addr_str, \
+			addr_str, picmph->type, picmph->code);
+	else
+		printf("From %s (%s): icmp_seq=%d Unexpected response type\n", \
+			matching_id ? g_ping_data.fqdn : addr_str, addr_str, \
+			pmetadata->seq_num);
 }
 
 static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, _Bool verbose)
