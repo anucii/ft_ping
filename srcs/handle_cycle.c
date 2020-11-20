@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 16:39:06 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 16:43:23 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ static void	handle_round_trip(t_options *options, \
 void		handle_cycle(char *ip_str, t_options *options)
 {
 	int						seq_num;
+	int						round_trips;
 
 	seq_num = 0;
+	round_trips = 0;
 	if (!dynarray_init(&g_ping_data.all_rtts))
 	{
 		fprintf(stderr, "ft_ping: rtt array allocation failed.\n");
@@ -83,5 +85,7 @@ void		handle_cycle(char *ip_str, t_options *options)
 			alarm(options->timeout);
 		handle_round_trip(options, ++seq_num);
 		alarm(0);
+		if (++round_trips >= options-> count)
+			break;
 	}
 }
