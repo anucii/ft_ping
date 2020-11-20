@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 17:26:35 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 16:06:05 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 19:16:23 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,6 @@ void				set_options(char c, char *argv[], \
 		else if (c == 'c')
 			check_positive_quantity(c, argv, next_pos, options);
 	}
+	if (!options->ttl)
+		options->ttl = 64;
 }

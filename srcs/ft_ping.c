@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 16:35:42 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/19 19:32:11 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 t_ping_shared_data	g_ping_data;
 
-static int			exit_ping()
+static void			exit_ping(int sig_value)
 {
 	// TODO : display rtt bottom line from g_ping_data;
-	return (EXIT_SUCCESS);
+	(void)sig_value;
+	if (g_ping_data.socket_fd > 0)
+	{
+		close(g_ping_data.socket_fd);
+		g_ping_data.socket_fd = -2;
+	}
+	printf("--- %s ping statistics ---\n", g_ping_data.fqdn);
 }
 
 int					main(int argc, char *argv[])
 {
 	t_options	options;
 	char		address_param[MAX_FQDN];
-	char		fqdn[MAX_FQDN];
 	char		ip_address[INET6_ADDRSTRLEN];
 
 	ft_bzero(&g_ping_data, sizeof(t_ping_shared_data));
@@ -36,8 +41,10 @@ int					main(int argc, char *argv[])
 		show_help();
 		return (options.help ? EXIT_SUCCESS : EXIT_FAILURE);
 	}
-	resolve_address(address_param, ip_address, fqdn);
-	// TODO handle ping cycle
-	printf("PING %s (%s)\n", fqdn, ip_address); // move to ping_cycle() ?
-	return (exit_ping());
+	resolve_address(address_param, ip_address, g_ping_data.fqdn);
+	signal(SIGQUIT, &exit_ping);
+	signal(SIGALRM, &exit_ping);
+	handle_cycle(ip_address, &options);
+	exit_ping(0);
+	return (EXIT_SUCCESS);
 }
