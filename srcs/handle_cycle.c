@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 15:57:23 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 16:39:06 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ void		handle_cycle(char *ip_str, t_options *options)
 	gettimeofday(&g_ping_data.ping_first_timestamp, NULL);
 	while (1)
 	{
+		if (options->timeout > 0)
+			alarm(options->timeout);
 		handle_round_trip(options, ++seq_num);
+		alarm(0);
 	}
 }

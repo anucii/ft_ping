@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 16:15:04 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 16:39:43 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void			exit_ping(int sig_value)
 	}
 	printf("--- %s ping statistics ---\n", g_ping_data.fqdn);
 	printf("%d packets transmitted, %d received, TODO: percentage and time\n", \
-		g_ping_data.sent_packets, g_ping_data.sent_packets);
+		g_ping_data.sent_packets, g_ping_data.received_packets);
 	exit(EXIT_SUCCESS);
 }
 
