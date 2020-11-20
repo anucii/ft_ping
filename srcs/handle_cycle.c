@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 23:48:13 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/21 00:22:16 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,26 @@
 
 extern t_ping_shared_data	g_ping_data;
 
-static void	close_socket(int sig_num)
+static void	set_deadline_timestamp(unsigned int deadline_secs)
 {
-	if (sig_num == SIGALRM)
-	{
-		close(g_ping_data.socket_fd);
-		g_ping_data.socket_fd = -2;
-	}
+	t_timeval				now;
+
+	if (gettimeofday(&now, NULL))
+		return;
+	g_ping_data.deadline_timestamp.tv_sec = now.tv_sec + (int)deadline_secs;
+	g_ping_data.deadline_timestamp.tv_usec = now.tv_usec;
+}
+
+static int	remaining_seconds_to_deadline()
+{
+	t_timeval				now;
+	int						remaining_secs;
+
+	if (gettimeofday(&now, NULL))
+		return (0);
+	remaining_secs = (int)g_ping_data.deadline_timestamp.tv_sec - (int)now.tv_sec;
+
+	return (remaining_secs);
 }
 
 static int	create_icmp_socket(unsigned int *ttl)
@@ -91,10 +104,11 @@ void		handle_cycle(char *ip_str, t_options *options)
 	printf("PING %s (%s)\n", g_ping_data.fqdn, ip_str);
 	gettimeofday(&g_ping_data.ping_first_timestamp, NULL);
 	if (options->deadline > 0)
-		alarm(options->deadline);
+		set_deadline_timestamp(options->deadline);
 	while (1)
 	{
-		signal(SIGALRM, &close_socket);
+		if (options->deadline > 0)
+			alarm(remaining_seconds_to_deadline());
 		handle_round_trip(options, ++seq_num);
 		if (++round_trips >= options-> count)
 			break;

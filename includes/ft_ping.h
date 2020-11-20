@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 15:59:21 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 23:59:19 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct 	s_ping_shared_data
 	char			fqdn[MAX_FQDN];
 	int				socket_fd;
 	t_timeval		ping_first_timestamp;
+	t_timeval		deadline_timestamp;
 	int				sent_packets;
 	int				received_packets;
 	t_dynarray		all_rtts;
