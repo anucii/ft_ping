@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 19:32:11 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/20 16:15:04 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ static void			exit_ping(int sig_value)
 		g_ping_data.socket_fd = -2;
 	}
 	printf("--- %s ping statistics ---\n", g_ping_data.fqdn);
+	printf("%d packets transmitted, %d received, TODO: percentage and time\n", \
+		g_ping_data.sent_packets, g_ping_data.sent_packets);
+	exit(EXIT_SUCCESS);
 }
 
 int					main(int argc, char *argv[])
@@ -42,9 +45,9 @@ int					main(int argc, char *argv[])
 		return (options.help ? EXIT_SUCCESS : EXIT_FAILURE);
 	}
 	resolve_address(address_param, ip_address, g_ping_data.fqdn);
+	signal(SIGINT, &exit_ping);
 	signal(SIGQUIT, &exit_ping);
 	signal(SIGALRM, &exit_ping);
 	handle_cycle(ip_address, &options);
 	exit_ping(0);
-	return (EXIT_SUCCESS);
 }
