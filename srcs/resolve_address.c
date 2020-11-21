@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/23 10:24:03 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 16:31:44 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/21 01:20:57 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void		set_hints(t_addrinfo *hints)
 {
 	hints->ai_family = AF_INET;
 	hints->ai_socktype = SOCK_RAW;
-	hints->ai_flags = AI_ADDRCONFIG | AI_CANONNAME; //ADD AI_V4MAPPED ?
+	hints->ai_flags = AI_ADDRCONFIG | AI_CANONNAME;
 	hints->ai_protocol = IPPROTO_TCP;
 	hints->ai_canonname = NULL;
 	hints->ai_addr = NULL;

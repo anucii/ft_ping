@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 23:47:47 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/21 01:25:42 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void		display_result(t_icmph *picmph, \
 {
 	_Bool					matching_id;
 	_Bool					type_is_reply;
-	
+
 	matching_id = pmetadata->id == (unsigned short)getpid();
 	type_is_reply = picmph->type == ICMP_ECHOREPLY;
 	if (matching_id && type_is_reply)
@@ -40,7 +40,8 @@ static void		display_result(t_icmph *picmph, \
 			pmetadata->seq_num);
 }
 
-static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, _Bool verbose)
+static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, \
+	_Bool verbose)
 {
 	t_in_addr		*in_addr;
 	t_icmph			*picmph;
@@ -97,5 +98,5 @@ void			handle_reply(t_options *options, const t_timeval sending_time)
 	else if (g_ping_data.socket_fd == -2)
 		return ;
 	else
-		fprintf(stderr, "ft_ping: recvmsg: operation failed");	
+		fprintf(stderr, "ft_ping: recvmsg: operation failed\n");
 }

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 00:26:45 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/21 01:29:37 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 t_ping_shared_data	g_ping_data;
 
-static _Bool		deadline_over()
+static _Bool		deadline_over(void)
 {
 	t_timeval		now;
+
 	if (!g_ping_data.deadline_timestamp.tv_sec)
 		return (0);
 	if (gettimeofday(&now, NULL) != 0)
@@ -36,6 +37,7 @@ static void			exit_ping(int sig_value)
 	printf("--- %s ping statistics ---\n", g_ping_data.fqdn);
 	printf("%d packets transmitted, %d received, TODO: percentage and time\n", \
 		g_ping_data.sent_packets, g_ping_data.received_packets);
+	dynarray_free(&g_ping_data.all_rtts);
 	exit(EXIT_SUCCESS);
 }
 

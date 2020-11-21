@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:58:46 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/20 15:57:54 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/21 01:24:40 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ extern t_ping_shared_data	g_ping_data;
 
 static unsigned short	checksum(t_ip_icmp *hdr)
 {
-	unsigned short 	sum;
-	unsigned short 	*array;
+	unsigned short	sum;
+	unsigned short	*array;
 	int				i;
 	int				size;
 
@@ -25,13 +25,11 @@ static unsigned short	checksum(t_ip_icmp *hdr)
 	i = -1;
 	array = (unsigned short *)hdr;
 	sum = 0;
-
 	while (++i < size)
 	{
 		sum += array[i];
 	}
-
-	return sum ^ 0xFFFF;
+	return (sum ^ 0xFFFF);
 }
 
 static void				fill_icmp_header(t_ip_icmp *hdr, int seq_num)
@@ -41,7 +39,6 @@ static void				fill_icmp_header(t_ip_icmp *hdr, int seq_num)
 	hdr->icmp_cksum = 0;
 	hdr->icmp_hun.ih_idseq.icd_id = (unsigned short)getpid();
 	hdr->icmp_hun.ih_idseq.icd_seq = seq_num;
-
 	hdr->icmp_cksum = checksum(hdr);
 }
 
@@ -51,7 +48,7 @@ _Bool					send_echo(t_ip_icmp *ip_icmp, \
 	_Bool					msg_sent;
 
 	ft_bzero((void *)ip_icmp, sizeof(t_ip_icmp));
-	fill_icmp_header(ip_icmp, seq_num);	
+	fill_icmp_header(ip_icmp, seq_num);
 	gettimeofday(psending_time, NULL);
 	msg_sent = sendto(g_ping_data.socket_fd, ip_icmp, \
 		(size_t)sizeof(t_ip_icmp), 0, &g_ping_data.target_addr, \
