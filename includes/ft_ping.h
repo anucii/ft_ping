@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 17:37:18 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 18:15:04 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,9 @@ unsigned int	ihl_words_to_bytes(unsigned int ip_header_32bits_words);
 unsigned int	little_endian(unsigned short val);
 
 void			exit_ping(int sig_value);
+double			get_rtt_min();
+double			get_rtt_max();
+double			get_rtt_avg();
+double			get_rtt_mdev();
 
 #endif
