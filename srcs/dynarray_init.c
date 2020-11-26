@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 11:21:32 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 15:43:16 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 18:58:16 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 _Bool	dynarray_init(t_dynarray *parray)
 {
 	double	*val_array;
-	size_t	capacity;
-	size_t	memsize;
+	ssize_t	capacity;
+	ssize_t	memsize;
 
 	if (!parray)
 		return (0);
@@ -28,6 +28,6 @@ _Bool	dynarray_init(t_dynarray *parray)
 	ft_bzero(val_array, memsize);
 	parray->array = val_array;
 	parray->capacity = capacity;
-	parray->last_val_index = 0;
+	parray->last_val_index = -1;
 	return (1);
 }

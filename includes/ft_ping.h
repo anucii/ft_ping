@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 18:15:04 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 18:55:15 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ typedef struct	s_pkglen
 typedef struct	s_dynarray
 {
 	double	*array;
-	size_t	capacity;
-	size_t	last_val_index;
+	ssize_t	capacity;
+	ssize_t	last_val_index;
 }				t_dynarray;
 
 typedef struct addrinfo	t_addrinfo;
@@ -125,7 +125,7 @@ _Bool			parse_args(int argc, char *argv[], char *target_address, \
 _Bool			dynarray_init(t_dynarray *parray);
 _Bool			dynarray_add(t_dynarray *parray, double val);
 void			dynarray_free(t_dynarray *parray);
-size_t			dynarray_getbuflen(void);
+ssize_t			dynarray_getbuflen(void);
 
 void			handle_cycle(char *ip_str, t_options *options);
 _Bool			send_echo(t_ip_icmp *ip_icpm, t_timeval *psending_time, \

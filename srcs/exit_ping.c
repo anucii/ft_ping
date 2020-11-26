@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:35:23 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 18:17:12 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 18:28:54 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void			exit_ping(int sig_value)
 		g_ping_data.sent_packets, g_ping_data.received_packets, \
 		100.0 * (g_ping_data.sent_packets - g_ping_data.received_packets) \
 		/ g_ping_data.sent_packets, compute_rtt(g_ping_data.ping_first_timestamp));
+	printf("rtt min/avg/max/mdev = %1.3f/%1.3f/%1.3f/%1.3f ms\n", \
+		get_rtt_min(), get_rtt_avg(), get_rtt_max(), get_rtt_mdev());
 	dynarray_free(&g_ping_data.all_rtts);
 	exit(EXIT_SUCCESS);
 }

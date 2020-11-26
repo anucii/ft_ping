@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 11:22:37 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 01:17:42 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 18:53:54 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static _Bool	extend_array(t_dynarray *parray)
 {
-	size_t	new_size;
+	ssize_t	new_size;
 
 	new_size = (parray->capacity + dynarray_getbuflen());
 	if (!ft_realloc((void **)&parray->array, \
@@ -26,7 +26,7 @@ static _Bool	extend_array(t_dynarray *parray)
 
 _Bool			dynarray_add(t_dynarray *parray, double val)
 {
-	size_t	val_index;
+	ssize_t	val_index;
 
 	if (!(parray && parray->array))
 		return (0);
