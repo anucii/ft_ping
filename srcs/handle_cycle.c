@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 01:29:59 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 14:12:50 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void		handle_cycle(char *ip_str, t_options *options)
 		if (options->deadline > 0)
 			alarm(remaining_seconds_to_deadline());
 		handle_round_trip(options, ++seq_num);
-		if (++round_trips >= options->count)
+		if ((options->count > 0) && (++round_trips >= options->count))
 			break ;
 	}
 }
