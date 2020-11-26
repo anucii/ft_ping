@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 01:18:52 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/26 17:37:18 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,7 @@ void			handle_reply(t_options *options, const t_timeval sending_time);
 double			compute_rtt(const t_timeval sending_time);
 unsigned int	ihl_words_to_bytes(unsigned int ip_header_32bits_words);
 unsigned int	little_endian(unsigned short val);
+
+void			exit_ping(int sig_value);
 
 #endif
