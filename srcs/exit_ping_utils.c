@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:58:21 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 18:57:21 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 15:23:07 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,38 @@ double	get_rtt_max()
 
 double	get_rtt_avg()
 {
-	return (0);
+	ssize_t	i;
+	double	average;
+	double	sum;
+
+	if (!g_ping_data.all_rtts.array)
+		return (0);
+	sum = 0;
+	i = -1;
+	while (++i < (g_ping_data.all_rtts.last_val_index + 1))
+		sum += g_ping_data.all_rtts.array[i];
+	average = sum / i;
+	return (average);
 }
 
 double	get_rtt_mdev()
 {
-	return (0);
+	ssize_t	i;
+	double	mdev;
+	double	average;
+	double	deviation;
+	double	dev_sum;
+
+	if (!g_ping_data.all_rtts.array)
+		return (0);
+	i = -1;
+	dev_sum = 0;
+	average = get_rtt_avg();
+	while (++i < (g_ping_data.all_rtts.last_val_index + 1))
+	{
+		deviation = average - g_ping_data.all_rtts.array[i];
+		dev_sum += deviation > 0 ? deviation : -deviation;
+	}
+	mdev = dev_sum / i;
+	return (mdev);
 }
