@@ -6,11 +6,35 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 19:40:25 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/10/23 15:59:15 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 16:30:22 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
+
+static _Bool	option_has_argument(char *argv[], int pos)
+{
+	char	*relevant_options;
+	size_t	i;
+	size_t	stop;
+
+	if (ft_strlen(argv[pos]) != 2)
+		return (0);
+	i = 0;
+	relevant_options = ft_strdup("cwWt");
+	stop = ft_strlen(relevant_options);
+	while (i < stop)
+	{
+		if (relevant_options[i] == argv[pos][1])
+		{
+			ft_strdel(&relevant_options);
+			return (1);
+		}
+		i++;
+	}
+	ft_strdel(&relevant_options);
+	return (0);
+}
 
 static _Bool	is_fqdn(char *src)
 {
@@ -57,8 +81,11 @@ static _Bool	is_alias(char *src)
 	return (alnum_alias);
 }
 
-void			parse_address(char *param, char *dest)
+void			parse_address(char *argv[], int pos, char *param, char *dest)
 {
+	if ((pos > 1) && (argv[pos -1][0] == '-') \
+		&& option_has_argument(argv, pos - 1))
+		return ;
 	if (param && dest)
 	{
 		if (ft_strlen(param) <= MAX_FQDN)

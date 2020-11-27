@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/27 15:26:53 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 16:10:20 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void			show_ttl_error(void);
 void			show_unknown_address(char *address);
 void			set_options(char c, char *argv[], const t_argv_cursor cursor, \
 	t_options *options);
-void			parse_address(char *param, char *dest);
+void			parse_address(char *argv[], int pos, char *param, char *dest);
 void			resolve_address(char *input, char *ip_dest, char *fqdn);
 _Bool			parse_args(int argc, char *argv[], char *target_address, \
 	t_options *options);

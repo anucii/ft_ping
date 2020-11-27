@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/17 11:53:10 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/19 16:06:25 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 16:20:03 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static _Bool	parse_args_execute(int argc, char *argv[], \
 			}
 		}
 		else
-			parse_address(arg, target_address);
+			parse_address(argv, i, arg, target_address);
 	}
 	return (*target_address != 0);
 }
