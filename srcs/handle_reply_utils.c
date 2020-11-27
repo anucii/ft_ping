@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 12:14:31 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 01:20:24 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 15:52:50 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ double			compute_rtt(const t_timeval sending_time)
 		return (0);
 	seconds_delta = recv_time.tv_sec - sending_time.tv_sec;
 	microseconds_delta = recv_time.tv_usec - sending_time.tv_usec;
-	round_trip_time = (double)seconds_delta \
+	round_trip_time = (double)seconds_delta * 1000 \
 		+ ((double)microseconds_delta / 1000);
 	return (round_trip_time);
 }
