@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:35:23 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 18:28:54 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 15:29:29 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@ void			exit_ping(int sig_value)
 	if (sig_value == SIGALRM && !deadline_over())
 		return ;
 	printf("--- %s ping statistics ---\n", g_ping_data.fqdn);
-	printf("%d packets transmitted, %d received, %.0f%% packet loss, time %.0fms\n", \
+	printf(\
+		"%d packets transmitted, %d received, %.0f%% packet loss, ", \
 		g_ping_data.sent_packets, g_ping_data.received_packets, \
 		100.0 * (g_ping_data.sent_packets - g_ping_data.received_packets) \
-		/ g_ping_data.sent_packets, compute_rtt(g_ping_data.ping_first_timestamp));
+		/ g_ping_data.sent_packets);
+	printf("time %.0fms\n", compute_rtt(g_ping_data.ping_first_timestamp));
 	printf("rtt min/avg/max/mdev = %1.3f/%1.3f/%1.3f/%1.3f ms\n", \
 		get_rtt_min(), get_rtt_avg(), get_rtt_max(), get_rtt_mdev());
 	dynarray_free(&g_ping_data.all_rtts);

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:58:21 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/27 15:23:07 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/11/27 15:26:51 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern t_ping_shared_data	g_ping_data;
 
-double	get_rtt_min()
+double	get_rtt_min(void)
 {
 	ssize_t	i;
 	double	min;
@@ -29,7 +29,7 @@ double	get_rtt_min()
 	return (min);
 }
 
-double	get_rtt_max()
+double	get_rtt_max(void)
 {
 	ssize_t	i;
 	double	max;
@@ -44,7 +44,7 @@ double	get_rtt_max()
 	return (max);
 }
 
-double	get_rtt_avg()
+double	get_rtt_avg(void)
 {
 	ssize_t	i;
 	double	average;
@@ -60,7 +60,7 @@ double	get_rtt_avg()
 	return (average);
 }
 
-double	get_rtt_mdev()
+double	get_rtt_mdev(void)
 {
 	ssize_t	i;
 	double	mdev;
