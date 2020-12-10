@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/27 16:10:20 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/12/10 16:47:59 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,10 @@ void			dynarray_free(t_dynarray *parray);
 ssize_t			dynarray_getbuflen(void);
 
 void			handle_cycle(char *ip_str, t_options *options);
-_Bool			send_echo(t_ip_icmp *ip_icpm, t_timeval *psending_time, \
+_Bool			send_echo(t_ip_icmp *ip_icmp, t_timeval *psending_time, \
 	int seq_num);
+_Bool			send_echo_reply(t_icmph *src);
+unsigned short	icmp_checksum(t_ip_icmp *hdr);
 void			handle_reply(t_options *options, const t_timeval sending_time);
 double			compute_rtt(const t_timeval sending_time);
 unsigned int	ihl_words_to_bytes(unsigned int ip_header_32bits_words);

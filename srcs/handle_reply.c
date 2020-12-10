@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/21 01:25:42 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/12/10 16:54:48 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 extern t_ping_shared_data	g_ping_data;
 
-static void		display_result(t_icmph *picmph, \
-	t_icmph_meta *pmetadata, char *addr_str, _Bool verbose)
+static void		display_result(t_icmph *picmph, t_icmph_meta *pmetadata, \
+	char *addr_str, _Bool verbose)
 {
 	_Bool					matching_id;
 	_Bool					type_is_reply;
@@ -41,7 +41,7 @@ static void		display_result(t_icmph *picmph, \
 }
 
 static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, \
-	_Bool verbose)
+	t_options *options, const t_timeval sending_time)
 {
 	t_in_addr		*in_addr;
 	t_icmph			*picmph;
@@ -61,7 +61,12 @@ static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, \
 	metadata.seq_num = picmph->un.echo.sequence;
 	metadata.recv_len = little_endian(piph->tot_len) - metadata.hdr_len;
 	metadata.round_trip_time = round_trip_time;
-	display_result(picmph, &metadata, addr_str, verbose);
+	if ((picmph->type == ICMP_ECHO) && send_echo_reply(picmph))
+	{
+		handle_reply(options, sending_time);
+		return ;
+	}
+	display_result(picmph, &metadata, addr_str, options->verbose);
 }
 
 static void		prepare_msghdr(t_msghdr *pmsghdr, t_msghdr_content *pcontent, \
@@ -94,7 +99,7 @@ void			handle_reply(t_options *options, const t_timeval sending_time)
 	recv_res = recvmsg(g_ping_data.socket_fd, &msghdr, 0);
 	round_trip_time = compute_rtt(sending_time);
 	if (recv_res > -1)
-		parse_reply(&msghdr, round_trip_time, options->verbose);
+		parse_reply(&msghdr, round_trip_time, options, sending_time);
 	else if (g_ping_data.socket_fd == -2)
 		return ;
 	else

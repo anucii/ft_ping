@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 19:40:25 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/27 16:30:22 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2020/12/10 16:55:14 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static _Bool	is_alias(char *src)
 
 void			parse_address(char *argv[], int pos, char *param, char *dest)
 {
-	if ((pos > 1) && (argv[pos -1][0] == '-') \
+	if ((pos > 1) && (argv[pos - 1][0] == '-') \
 		&& option_has_argument(argv, pos - 1))
 		return ;
 	if (param && dest)
