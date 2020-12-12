@@ -6,15 +6,14 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2020/12/10 16:18:15 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2020/12/12 16:07:46 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: test re clean bclean fclean
 
 CC = clang
-# TODO : remove debug flag (-g)
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 NAME = ft_ping
 
