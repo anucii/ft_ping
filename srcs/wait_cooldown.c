@@ -14,7 +14,7 @@
 
 void            wait_cooldown(void)
 {
-    timeval_t   cursor;
+    t_timeval	cursor;
     time_t      end;
     
     gettimeofday(&cursor, NULL);
