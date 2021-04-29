@@ -6,11 +6,11 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2021/04/29 20:44:49 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2021/04/29 21:23:19 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: test re clean bclean fclean authorize
+.PHONY: demo re clean bclean fclean authorize
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
@@ -56,9 +56,13 @@ fclean : bclean
 
 re : fclean $(NAME)
 
-test : $(NAME)
-		./$(NAME) -c 4 8.8.8.8
+demo : authorize
+		@echo "\n\e[32mBasic usage\e[0m" && ./$(NAME) -c 4 8.8.8.8
+		@echo "\n\e[31mPinging unreachable IP\e[0m" && ./$(NAME) -c 10 10.2.2.6
+		@echo "\n\e[31mPinging unreachable IP (verbose mode)\e[0m" && ./$(NAME) -c 10 10.2.2.6 -v
+		@echo "\n\e[31mInsufficient TTL\e[0m" && ./$(NAME) -c 5 google.com -t 3
+		@echo "\n\e[31mInsufficient TTL (verbose mode)\e[0m" && ./$(NAME) -c 5 google.com -t 3 -v
 
 authorize : $(NAME)
-		sudo setcap cap_net_raw=pe $(NAME)
-		getcap $(NAME)
+		@sudo setcap cap_net_raw=pe $(NAME)
+		@getcap $(NAME)
