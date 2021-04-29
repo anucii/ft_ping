@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:29:53 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/26 17:54:53 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 15:51:07 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int					main(int argc, char *argv[])
 
 	ft_bzero(&g_ping_data, sizeof(t_ping_shared_data));
 	ft_bzero(&options, sizeof(t_options));
+	options.timeout = 1;
 	ft_bzero(address_param, MAX_FQDN);
 	ft_bzero(ip_address, INET6_ADDRSTRLEN);
 	if (!parse_args(argc, argv, address_param, &options) || options.help)
