@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2021/04/29 21:02:11 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 22:20:41 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void			handle_reply(t_options *options, const t_timeval sending_time)
 	double					round_trip_time;
 
 	prepare_msghdr(&msghdr, &content, &iov);
-	if (options->timeout > 0)
+	if (options->timeout > 0 && !deadline_over())
 		alarm(options->timeout);
 	recv_res = recvmsg(g_ping_data.socket_fd, &msghdr, 0);
 	round_trip_time = compute_rtt(sending_time);

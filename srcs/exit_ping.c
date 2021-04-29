@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 17:35:23 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/11/27 16:36:15 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 22:17:45 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern t_ping_shared_data	g_ping_data;
 
-static _Bool	deadline_over(void)
+_Bool			deadline_over(void)
 {
 	t_timeval	now;
 

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2021/04/29 16:57:30 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 22:17:56 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	remaining_seconds_to_deadline(void)
 		return (0);
 	remaining_secs = (int)g_ping_data.deadline_timestamp.tv_sec - \
 		(int)now.tv_sec;
-	return (remaining_secs);
+	return (remaining_secs > 0 ? remaining_secs : 1);
 }
 
 static int	create_icmp_socket(unsigned int *ttl)
@@ -64,7 +64,7 @@ static void	handle_round_trip(t_options *options, \
 	t_timeval				sending_time;
 
 	g_ping_data.socket_fd = create_icmp_socket(&options->ttl);
-	if (options->timeout > 0)
+	if ((options->timeout > 0) && !deadline_over())
 		alarm(options->timeout);
 	if (g_ping_data.socket_fd == -1)
 	{
@@ -93,9 +93,9 @@ void		handle_cycle(char *ip_str, t_options *options)
 		set_deadline_timestamp(options->deadline);
 	while (1)
 	{
+		handle_round_trip(options, ++seq_num);
 		if (options->deadline > 0)
 			alarm(remaining_seconds_to_deadline());
-		handle_round_trip(options, ++seq_num);
 		if ((options->count > 0) && (++round_trips >= options->count))
 			break ;
 		wait_cooldown();
