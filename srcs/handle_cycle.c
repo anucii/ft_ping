@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/12/10 17:16:53 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 12:02:54 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,14 @@ static int	create_icmp_socket(unsigned int *ttl)
 	socket_fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (socket_fd < 0)
 	{
-		fprintf(stderr, "ft_ping: ICMP socket creation failed.\n");
+		if ((errno == EACCES) || (errno == EPERM))
+		{
+			fprintf(stderr, "ft_ping: user has insufficient permissions.\n");
+		}
+		else
+		{
+			fprintf(stderr, "ft_ping: ICMP socket creation failed.\n");
+		}
 		exit(EXIT_FAILURE);
 	}
 	setsockopt(socket_fd, IPPROTO_IP, IP_TTL, ttl, sizeof(int));
