@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 23:59:47 by jdaufin           #+#    #+#             */
-/*   Updated: 2020/12/10 16:54:48 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 21:02:11 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void		display_result(t_icmph *picmph, t_icmph_meta *pmetadata, \
 {
 	_Bool					matching_id;
 	_Bool					type_is_reply;
+	char					icmp_translation[256];
 
 	matching_id = pmetadata->id == (unsigned short)getpid();
 	type_is_reply = picmph->type == ICMP_ECHOREPLY;
@@ -30,14 +31,19 @@ static void		display_result(t_icmph *picmph, t_icmph_meta *pmetadata, \
 			pmetadata->recv_len, g_ping_data.fqdn, addr_str, \
 			pmetadata->seq_num, pmetadata->ttl, pmetadata->round_trip_time);
 	}
-	else if (verbose)
-		printf("%d bytes from %s (%s): type=%d code=%d\n", \
-			pmetadata->recv_len, matching_id ? g_ping_data.fqdn : addr_str, \
-			addr_str, picmph->type, picmph->code);
 	else
-		printf("From %s (%s): icmp_seq=%d Unexpected response type\n", \
-			matching_id ? g_ping_data.fqdn : addr_str, addr_str, \
-			pmetadata->seq_num);
+	{
+		translate_icmp_type(icmp_translation, picmph->type);
+		if (verbose)
+			printf("%d bytes from %s (%s): type=%d (%s) code=%d\n", \
+				pmetadata->recv_len, matching_id ? g_ping_data.fqdn : \
+				addr_str, addr_str, picmph->type, icmp_translation, \
+				picmph->code);
+		else
+			printf("From %s (%s): icmp_seq=%d %s\n", \
+				matching_id ? g_ping_data.fqdn : addr_str, addr_str, \
+				pmetadata->seq_num, icmp_translation);
+	}
 }
 
 static void		parse_reply(t_msghdr *pmsghdr, const double round_trip_time, \

@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/15 18:28:42 by jdaufin           #+#    #+#             */
-/*   Updated: 2021/04/29 16:57:30 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 20:55:51 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,6 @@ double			get_rtt_max(void);
 double			get_rtt_avg(void);
 double			get_rtt_mdev(void);
 void			wait_cooldown(void);
+void			translate_icmp_type(char *dst, uint8_t type);
 
 #endif
