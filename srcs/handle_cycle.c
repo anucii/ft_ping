@@ -6,7 +6,7 @@
 /*   By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 17:09:49 by jdaufin           #+#    #+#             */
-/*   Updated: 2021/04/29 12:02:54 by jdaufin          ###   ########lyon.fr   */
+/*   Updated: 2021/04/29 16:57:30 by jdaufin          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ void		handle_cycle(char *ip_str, t_options *options)
 		handle_round_trip(options, ++seq_num);
 		if ((options->count > 0) && (++round_trips >= options->count))
 			break ;
+		wait_cooldown();
 	}
 }
