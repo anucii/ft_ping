@@ -6,7 +6,7 @@
 #    By: jdaufin <jdaufin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/15 18:18:37 by jdaufin           #+#    #+#              #
-#    Updated: 2021/04/29 22:23:28 by jdaufin          ###   ########lyon.fr    #
+#    Updated: 2021/04/30 10:26:03 by jdaufin          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,9 +57,9 @@ fclean : bclean
 re : fclean $(NAME)
 
 demo : authorize
-		@echo "\n\e[32mBasic usage\e[0m" && ./$(NAME) -c 4 8.8.8.8
-		@echo "\n\e[31mInsufficient TTL\e[0m" && ./$(NAME) -c 5 google.com -t 3
-		@echo "\n\e[31mInsufficient TTL (verbose mode)\e[0m" && ./$(NAME) -c 5 google.com -t 3 -v
+		@echo "\n\e[32mBasic usage\e[0m : $(NAME) -c 4 8.8.8.8" && ./$(NAME) -c 4 8.8.8.8
+		@echo "\n\e[31mInsufficient TTL\e[0m : $(NAME) -c 5 google.com -t 3" && ./$(NAME) -c 5 google.com -t 3
+		@echo "\n\e[31mInsufficient TTL (verbose mode)\e[0m : $(NAME) -c 5 google.com -t 3 -v" && ./$(NAME) -c 5 google.com -t 3 -v
 
 authorize : $(NAME)
 		@sudo setcap cap_net_raw=pe $(NAME)
