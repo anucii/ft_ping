@@ -58,8 +58,6 @@ re : fclean $(NAME)
 
 demo : authorize
 		@echo "\n\e[32mBasic usage\e[0m" && ./$(NAME) -c 4 8.8.8.8
-		@echo "\n\e[31mPinging unreachable IP\e[0m" && ./$(NAME) -c 10 10.2.2.6
-		@echo "\n\e[31mPinging unreachable IP (verbose mode)\e[0m" && ./$(NAME) -c 10 10.2.2.6 -v
 		@echo "\n\e[31mInsufficient TTL\e[0m" && ./$(NAME) -c 5 google.com -t 3
 		@echo "\n\e[31mInsufficient TTL (verbose mode)\e[0m" && ./$(NAME) -c 5 google.com -t 3 -v
 
